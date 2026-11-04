@@ -1,6 +1,6 @@
 # 03 — Design System: “Target Court”
 
-A modern sports identity for MPTA/Targetball: court geometry, target rings, deep ink surfaces and a disciplined teal-and-amber palette. The system is association-configurable; the current colours are development seeds pending official confirmation (OD-01, OD-11).
+A modern sports identity for MPTA/Targetball: court geometry, target rings, deep ink surfaces and a disciplined teal-and-amber palette. The public site adds an editorial “luxe sport” layer — ink green, warm paper, cream and brass gold — with a serif display voice for championship storytelling. The system is association-configurable; the current colours are development seeds pending official confirmation (OD-01, OD-11).
 
 ## 1. Design principles
 
@@ -26,12 +26,15 @@ The theme must remain attractive with any reasonable association colour: surface
 
 | Token | Hex | Use |
 | --- | --- | --- |
-| `ink-950` | `#050b14` | Deepest hero/footer background |
-| `ink-900` | `#0a1220` | Sidebar, dark surfaces |
-| `ink-800` | `#111c2f` | Raised dark panels |
-| `ink-700` | `#1b2a41` | Dark borders/hover |
-| `paper` | `#f6f7f2` | Page background (warm, not clinical) |
-| `line` | `#e4e8e2` | Light borders |
+| `ink-950` | `#06110e` | Deepest hero/footer background |
+| `ink-900` | `#0a1a16` | Sidebar, dark surfaces |
+| `ink-800` | `#14261f` | Raised dark panels |
+| `ink-700` | `#1f352c` | Dark borders/hover |
+| `paper` | `#f5f2ea` | Page background (warm ivory) |
+| `cream` | `#ece4d3` | Tinted sections, quiet panels |
+| `line` | `#e2dccd` | Light borders |
+| `gold` | `#c1a26a` | Editorial eyebrow, hairlines, luxe accents |
+| `gold-soft` | `#e8dcc2` | Soft gold fills |
 | `white` | `#ffffff` | Cards, forms |
 
 Body text uses Tailwind `slate-900/800/600/500`, which meets AA on paper and white at normal sizes.
@@ -61,8 +64,11 @@ Contrast note: white text is never placed on amber; amber is used for fills with
 
 | Role | Family | Weights | Notes |
 | --- | --- | --- | --- |
-| Display | Space Grotesk Variable | 500–700 | Headings, hero, stats, section labels |
+| Editorial display | Bodoni Moda Variable | 400–700 | Public hero and section headlines, championship storytelling |
+| Display / utility | Space Grotesk Variable | 500–700 | Stats, labels, admin headings, kicker numbers |
 | Body | Plus Jakarta Sans Variable | 400–700 | Paragraphs, forms, tables, navigation |
+
+Public headline classes: `display-serif-xl` (hero), `display-serif-lg` (section), `display-serif-md` (panel/feature). Editorial eyebrows use `eyebrow-luxe` with a short gold rule. Admin screens keep the Space Grotesk display voice.
 
 Scale (desktop; clamps on smaller screens):
 
@@ -122,6 +128,20 @@ States: hover darkens; focus-visible ring; disabled 50% + not-allowed; loading k
 - `.surface-tint` — brand 8–10% tint for selected or informational areas.
 - `.panel` — admin section container; same visual language, slightly tighter radius.
 
+### Editorial luxe layer (public)
+- `.luxe-card` — white card with a warm gold-tinted hairline and a deep, soft lift; used for story and category cards.
+- `.luxe-panel` — ink-green gradient panel with a brass radial glow, used for CTAs and feature panels.
+- `.photo-veil` / `.photo-veil-soft` — ink gradients that keep white text legible over real photography.
+- `.photo-grain` — a subtle SVG grain overlay for dark panels; decorative only.
+- `.eyebrow-luxe` — uppercase gold micro-label with a 24px rule before it.
+- `.rule-gold` — a 1px brass hairline used at hero and section boundaries.
+- `.display-serif*` — Bodoni Moda headlines with tight leading; use for public storytelling, not dense UI.
+- `.btn-gold` — brass fill with ink text, for the single strongest action on a dark surface.
+- `.btn-outline-light` — ghost action on photography or ink panels.
+- `.gallery-tile` — fixed-ratio image tile with hover scale, bottom veil and caption; supports a native `<dialog>` lightbox.
+- `.kicker-number` — tabular gold “01 / 02 / 03” markers.
+- `.nav-panel` — dark dropdown used inside a `<details>` element for the Association menu.
+
 ### Forms
 - Labels above fields, required marked in text (not colour alone).
 - Inputs 44px, 14px radius, 1px `line`; focus uses brand border + 3px brand ring.
@@ -174,11 +194,12 @@ Rules:
 
 | Design element | Implementation |
 | --- | --- |
-| Fonts | `@fontsource-variable/space-grotesk`, `@fontsource-variable/plus-jakarta-sans` imported in `resources/css/app.css` |
+| Fonts | `@fontsource-variable/bodoni-moda`, `@fontsource-variable/space-grotesk`, `@fontsource-variable/plus-jakarta-sans` imported in `resources/css/app.css` |
 | Tokens | Tailwind 4 `@theme` + `:root` brand variables |
 | Dynamic brand | `--brand` / `--brand-accent` injected by layouts from association settings |
 | Motif | Inline SVG partial/component using `currentColor` and brand vars |
-| Buttons/cards/forms | Component classes in `resources/css/app.css` (`btn-*`, `card`, `input`, `badge-*`) |
+| Photography | `x-public.photo` renders responsive WebP `srcset` from `public/images/site` |
+| Buttons/cards/forms | Component classes in `resources/css/app.css` (`btn-*`, `card`, `input`, `badge-*`, `luxe-*`) |
 | Motion | `@keyframes` + utility classes, guarded by reduced-motion media query |
 | Icons | Inline SVG, 20/24px, 1.75 stroke, no icon dependency |
 
@@ -189,9 +210,10 @@ Rules:
 - Use one primary action per screen area.
 - Keep dark surfaces for storytelling and navigation, light surfaces for work.
 - Mark placeholder copy in docs and code comments where it could be mistaken for policy.
+- Use authentic association photography with a visible source credit; never substitute generated or generic sports imagery for the real game.
+- Keep photography full-bleed and let text sit on gradients, not busy image areas.
 
 **Don't**
 - Invent official logos, colours, fees, office bearers or rule claims.
 - Put white text on amber or low-contrast text on brand fills.
-- Use stock sports photos as a substitute for approved association imagery.
 - Add a second accent family, gradients on every card, or looping animations.

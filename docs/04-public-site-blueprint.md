@@ -6,20 +6,21 @@ The public site is the association's official face. It must be credible on first
 
 | Priority | Page | Status | Data source | Notes |
 | --- | --- | --- | --- | --- |
-| P0 | Home | Live | Association, enabled sports, district count, membership categories | Sections below |
+| P0 | Home | Live | Association, enabled sports, district count, membership categories, `PublicContent` | Ten-section editorial build |
 | P0 | Login | Live | Association branding | Administrative access |
-| P1 | About | Designed | Association profile/about setting | Official copy pending OD-01 |
-| P1 | Governance | Designed | Office bearers/committees (M1) | Historical terms retained |
-| P1 | District directory | Designed | Districts (M2) | 55 validated districts |
-| P1 | Sport — Targetball | Designed | Sports/disciplines/categories (M3) | Approved sport copy only |
-| P2 | Organizations | Designed | Approved public organizations (M4) | Public fields only |
-| P2 | Events | Designed | Published events (M7) | Calendar + detail |
-| P2 | Results | Designed | Approved results (M9) | Searchable |
-| P2 | News and notices | Designed | Published CMS items (M11) | RSS optional later |
-| P2 | Downloads | Designed | Public documents (M11) | Authorized public files |
-| P3 | Register | Designed | Player/membership policy (OD-03/05/06) | Entry point, status tracking |
-| P3 | Contact | Designed | Association contact + form | Spam/rate protection |
-| P3 | Privacy / Terms | Designed | Legal copy | Association approval required |
+| P1 | About | Live | Association profile/about setting + milestones | Official appointments still pending OD-01 |
+| P1 | Governance | Live | Structure copy + district/sport counts | Office bearers marked awaiting confirmation |
+| P1 | District directory | Live | Districts (M2) | 55 validated districts, client-side search |
+| P1 | District detail | Live | State-scoped districts | 404 outside the association state |
+| P1 | Sport — Targetball | Live | Sports/disciplines/categories (M3) | Approved sport facts only |
+| P2 | Events | Live | `PublicContent` + association facts | Championship and milestones |
+| P2 | Results | Live | `PublicContent` | Status-first; no invented results |
+| P2 | News and notices | Live | `PublicContent` championship story | One verified update + notice board |
+| P2 | Gallery | Live | 2025 championship photography | Native `<dialog>` lightbox |
+| P2 | Downloads | Live | Static document list | Items marked “on request” |
+| P3 | Register | Live | Membership policy + categories | Office-led pathway, no fake form |
+| P3 | Contact | Live | Association contact + email topics | Pre-addressed mailto, no unchecked form |
+| P3 | Privacy / Terms | Live | Portal policy copy | Association approval still recommended |
 
 No public page may render private player data, internal notes, application documents or financial details (PRD §5.3).
 
@@ -137,3 +138,14 @@ No public page may render private player data, internal notes, application docum
 - No third-party tracking or advertising pixels by default.
 - If analytics are added, they must be privacy-respecting, documented and disclosed.
 - Contact form data is never shown publicly and is retained per the association's policy.
+
+## 7. As-built editorial refresh (v0.2)
+
+The homepage specification above records the first Target Court build. The current public site keeps its information architecture but changes the visual treatment:
+
+- **Header** — ink-green two-tier bar with Instagram/national-body links, primary navigation (The game, Districts, Events, Gallery, Membership, Contact), an “Association” dropdown for secondary pages, and a gold “Join the association” action. Mobile uses a full-width dark menu.
+- **Hero** — full-bleed 2025 championship photography with an ink veil, Bodoni Moda headline, gold eyebrow, four association/sport facts and an event card linking to the championship page.
+- **Sections** — cream editorial ticker; “The game” split with authentic lineup photography and four sport facts; dark championship spotlight with a floating date card; three-step pathway; district network with twelve linked districts; membership cards from the database; a five-image gallery mosaic; the championship story beside an official-channels panel; closing CTA.
+- **Photography** — real championship frames only, responsive WebP with `-sm` variants, footer credit to the 2025 National Targetball Championship, Bhopal.
+- **Honesty rules** — no invented results, office bearers, documents or fees. Results show “pending publication”; downloads show “on request”; governance shows “awaiting confirmation”.
+- **Interaction** — vanilla JS only: mobile menu, district search, gallery lightbox. No Alpine or framework bundle on public pages.

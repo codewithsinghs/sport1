@@ -4,26 +4,50 @@
     $shortName = $association?->short_name ?? $associationName;
     $stateName = $association?->state?->name ?? 'Madhya Pradesh';
     $description = trim($__env->yieldContent('description')) ?: ($association?->setting('about') ?: $associationName.' official portal');
+    $ogImage = trim($__env->yieldContent('og_image')) ?: ($association?->logoUrl() ? url($association->logoUrl()) : asset('images/site/hero-stadium.webp'));
+    $instagram = $association?->setting(\App\Modules\Association\Services\AssociationSettings::INSTAGRAM_URL);
+    $nationalBody = $association?->setting(\App\Modules\Association\Services\AssociationSettings::NATIONAL_BODY_URL);
+    $primaryNav = [
+        ['label' => 'The game', 'url' => route('sports.index'), 'active' => request()->routeIs('sports.*')],
+        ['label' => 'Districts', 'url' => route('districts.index'), 'active' => request()->routeIs('districts.*')],
+        ['label' => 'Events', 'url' => route('events.index'), 'active' => request()->routeIs('events.*')],
+        ['label' => 'Gallery', 'url' => route('gallery.index'), 'active' => request()->routeIs('gallery.*')],
+        ['label' => 'Membership', 'url' => route('membership'), 'active' => request()->routeIs('membership')],
+        ['label' => 'Contact', 'url' => route('contact'), 'active' => request()->routeIs('contact')],
+    ];
+    $associationNav = [
+        ['label' => 'About the association', 'url' => route('about'), 'active' => request()->routeIs('about')],
+        ['label' => 'Governance', 'url' => route('governance'), 'active' => request()->routeIs('governance')],
+        ['label' => 'News & notices', 'url' => route('news.index'), 'active' => request()->routeIs('news.*')],
+        ['label' => 'Results', 'url' => route('results.index'), 'active' => request()->routeIs('results.*')],
+        ['label' => 'Downloads', 'url' => route('downloads.index'), 'active' => request()->routeIs('downloads.*')],
+        ['label' => 'Register', 'url' => route('register'), 'active' => request()->routeIs('register')],
+    ];
+    $associationActive = collect($associationNav)->contains(fn ($item) => $item['active']);
 @endphp
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="h-full">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#050b14">
+    <meta name="theme-color" content="#06110e">
     <title>@yield('title', $associationName)</title>
     <meta name="description" content="{{ $description }}">
     <link rel="canonical" href="{{ url()->current() }}">
+    @stack('head')
 
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="{{ $associationName }}">
     <meta property="og:title" content="@yield('title', $associationName)">
     <meta property="og:description" content="{{ $description }}">
     <meta property="og:url" content="{{ url()->current() }}">
-    @if ($association?->logoUrl())
-        <meta property="og:image" content="{{ url($association->logoUrl()) }}">
+    @if ($ogImage)
+        <meta property="og:image" content="{{ $ogImage }}">
     @endif
     <meta name="twitter:card" content="summary_large_image">
+    @if ($ogImage)
+        <meta name="twitter:image" content="{{ $ogImage }}">
+    @endif
 
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -44,6 +68,7 @@
                 'logo' => $association->logoUrl() ? url($association->logoUrl()) : null,
                 'email' => $association->email,
                 'telephone' => $association->phone,
+                'sameAs' => array_filter([$instagram, $nationalBody]),
                 'address' => $association->address ? [
                     '@type' => 'PostalAddress',
                     'streetAddress' => $association->address,
@@ -57,69 +82,72 @@
 <body class="min-h-screen bg-paper text-slate-800">
     <a href="#main" class="skip-link">Skip to content</a>
 
-    <div class="bg-ink-950 text-white/65">
-        <div class="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 text-[11px] font-medium tracking-wide sm:px-6 lg:px-8">
-            <p class="flex min-w-0 items-center gap-2">
-                <span class="h-1.5 w-1.5 shrink-0 rounded-full" style="background-color: var(--brand-accent)"></span>
-                <span class="truncate">{{ $shortName }} &middot; {{ $stateName }}</span>
+    <div class="border-b border-white/[0.06] bg-ink-950 text-white/50">
+        <div class="mx-auto flex h-9 max-w-7xl items-center justify-between gap-4 px-4 text-[10px] font-semibold uppercase tracking-[0.18em] sm:px-6 lg:px-8">
+            <p class="flex min-w-0 items-center gap-2.5">
+                <span class="h-1 w-1 shrink-0 rounded-full bg-gold"></span>
+                <span class="truncate">Official state association &middot; {{ $stateName }}</span>
             </p>
-            <a href="{{ route('login') }}" class="hidden items-center gap-1.5 transition hover:text-white sm:inline-flex">
-                Administrative login
-                <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M9 7h8v8" />
-                </svg>
-            </a>
+            <div class="flex items-center gap-5">
+                @if ($instagram)
+                    <a href="{{ $instagram }}" target="_blank" rel="noopener noreferrer" class="hidden items-center gap-1.5 transition hover:text-white sm:inline-flex">Instagram</a>
+                @endif
+                @if ($nationalBody)
+                    <a href="{{ $nationalBody }}" target="_blank" rel="noopener noreferrer" class="hidden items-center gap-1.5 transition hover:text-white md:inline-flex">National body</a>
+                @endif
+                <a href="{{ route('login') }}" class="transition hover:text-white">Admin login</a>
+            </div>
         </div>
     </div>
 
-    <header class="sticky top-0 z-40 border-b border-line/80 bg-paper/90 backdrop-blur-xl">
-        <div class="mx-auto flex h-[72px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <header class="sticky top-0 z-40 border-b border-white/10 bg-ink-950/95 text-white backdrop-blur-xl">
+        <div class="mx-auto flex h-[76px] max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
             <a href="{{ route('home') }}" class="min-w-0 rounded-xl" aria-label="{{ $associationName }} home">
-                <x-brand-lockup :association="$association" :subtitle="$stateName" />
+                <x-brand-lockup :association="$association" variant="dark" :subtitle="$stateName" />
             </a>
 
-            <nav class="hidden items-center gap-8 lg:flex" aria-label="Public">
-                <a href="{{ route('home') }}#association" class="public-nav-link">The association</a>
-                <a href="{{ route('home') }}#sport" class="public-nav-link">Sport</a>
-                <a href="{{ route('home') }}#membership" class="public-nav-link">Membership</a>
-                <a href="{{ route('home') }}#contact" class="public-nav-link">Contact</a>
+            <nav class="hidden items-center gap-6 xl:flex" aria-label="Public">
+                @foreach ($primaryNav as $item)
+                    <a href="{{ $item['url'] }}" class="public-nav-dark" @if ($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a>
+                @endforeach
+
+                <details class="group relative">
+                    <summary class="public-nav-dark cursor-pointer list-none [&::-webkit-details-marker]:hidden {{ $associationActive ? 'text-white' : '' }}">
+                        Association
+                        <svg class="ml-1.5 inline h-3 w-3 transition group-open:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <div class="nav-panel">
+                        @foreach ($associationNav as $item)
+                            <a href="{{ $item['url'] }}" @if ($item['active']) aria-current="page" class="text-white" @endif>{{ $item['label'] }}</a>
+                        @endforeach
+                    </div>
+                </details>
             </nav>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('login') }}" class="btn btn-brand btn-sm btn-pill hidden sm:inline-flex">
-                    Member login
-                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6" />
-                    </svg>
+                <a href="{{ route('register') }}" class="btn btn-gold btn-sm btn-pill hidden sm:inline-flex">
+                    Join the association
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </a>
 
-                <button
-                    type="button"
-                    id="menu-toggle"
-                    class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-white text-slate-700 transition hover:border-slate-300 hover:text-ink-900 lg:hidden"
-                    aria-controls="mobile-menu"
-                    aria-expanded="false"
-                    aria-label="Open navigation"
-                >
-                    <svg id="menu-icon-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
-                    </svg>
-                    <svg id="menu-icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                        <path stroke-linecap="round" d="M6 6l12 12M18 6 6 18" />
-                    </svg>
+                <button type="button" id="menu-toggle" class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/15 text-white transition hover:border-white/35 hover:bg-white/10 xl:hidden" aria-controls="mobile-menu" aria-expanded="false" aria-label="Open navigation">
+                    <svg id="menu-icon-open" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"/></svg>
+                    <svg id="menu-icon-close" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path stroke-linecap="round" d="M6 6l12 12M18 6 6 18"/></svg>
                 </button>
             </div>
         </div>
 
-        <div id="mobile-menu" class="hidden border-t border-line bg-paper px-4 pb-5 pt-3 lg:hidden">
+        <div id="mobile-menu" class="hidden border-t border-white/10 bg-ink-950 px-4 pb-6 pt-3 xl:hidden">
             <nav class="grid gap-1" aria-label="Public mobile">
-                <a href="{{ route('home') }}#association" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-white">The association</a>
-                <a href="{{ route('home') }}#sport" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-white">Sport</a>
-                <a href="{{ route('home') }}#membership" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-white">Membership</a>
-                <a href="{{ route('home') }}#contact" class="rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 hover:bg-white">Contact</a>
-                <a href="{{ route('login') }}" class="mt-2 inline-flex items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold text-white" style="background-color: var(--brand); color: var(--brand-on)">
-                    Member login
-                </a>
+                <a href="{{ route('home') }}" class="rounded-xl px-3 py-2.5 text-sm font-medium text-white/75 hover:bg-white/10" @if (request()->routeIs('home')) aria-current="page" @endif>Home</a>
+                @foreach ($primaryNav as $item)
+                    <a href="{{ $item['url'] }}" class="rounded-xl px-3 py-2.5 text-sm font-medium {{ $item['active'] ? 'bg-white/10 text-white' : 'text-white/75 hover:bg-white/10' }}" @if ($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a>
+                @endforeach
+                <p class="mt-4 px-3 text-[10px] font-bold uppercase tracking-[0.2em] text-white/35">The association</p>
+                @foreach ($associationNav as $item)
+                    <a href="{{ $item['url'] }}" class="rounded-xl px-3 py-2.5 text-sm font-medium {{ $item['active'] ? 'bg-white/10 text-white' : 'text-white/75 hover:bg-white/10' }}" @if ($item['active']) aria-current="page" @endif>{{ $item['label'] }}</a>
+                @endforeach
+                <a href="{{ route('register') }}" class="mt-3 inline-flex items-center justify-center rounded-xl bg-gold px-4 py-2.5 text-sm font-semibold text-ink-950">Join the association</a>
             </nav>
         </div>
     </header>
@@ -129,34 +157,49 @@
     </main>
 
     <footer class="relative overflow-hidden bg-ink-950 text-white">
-        <x-target-motif class="pointer-events-none absolute -bottom-40 -right-24 w-[460px] text-white/80 opacity-20" />
+        <div class="pointer-events-none absolute -right-40 -top-40 h-[28rem] w-[28rem] rounded-full border border-white/[0.06]"></div>
+        <div class="pointer-events-none absolute -right-20 -top-20 h-[20rem] w-[20rem] rounded-full border border-gold/10"></div>
         <div class="relative mx-auto max-w-7xl px-4 pb-8 pt-16 sm:px-6 lg:px-8 lg:pt-20">
-            <div class="grid gap-10 lg:grid-cols-[1.4fr_0.8fr_1fr_0.8fr]">
+            <div class="grid gap-12 lg:grid-cols-[1.5fr_0.8fr_0.9fr_1fr]">
                 <div>
                     <a href="{{ route('home') }}" class="inline-block rounded-xl">
                         <x-brand-lockup :association="$association" variant="dark" :subtitle="$stateName" />
                     </a>
-                    <p class="mt-5 max-w-sm text-sm leading-relaxed text-white/55">
-                        Official portal of {{ $associationName }}. Association information, membership and competition updates published by the state body.
+                    <p class="mt-6 max-w-sm text-sm leading-relaxed text-white/50">
+                        The official portal of {{ $associationName }} — the state body for Targetball, connecting players, officials, districts and competition across {{ $stateName }}.
                     </p>
-                    <p class="mt-4 text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">
-                        {{ $stateName }} &middot; {{ $association?->short_name ?? 'Association' }}
-                    </p>
+                    <div class="mt-6 flex flex-wrap gap-2">
+                        @if ($instagram)
+                            <a href="{{ $instagram }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-gold/50 hover:text-white">Instagram</a>
+                        @endif
+                        @if ($nationalBody)
+                            <a href="{{ $nationalBody }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 rounded-full border border-white/15 px-3.5 py-1.5 text-xs font-semibold text-white/70 transition hover:border-gold/50 hover:text-white">Targetball India</a>
+                        @endif
+                    </div>
                 </div>
 
                 <div>
-                    <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">Explore</p>
-                    <ul class="mt-4 space-y-2.5 text-sm text-white/65">
-                        <li><a href="{{ route('home') }}#association" class="transition hover:text-white">The association</a></li>
-                        <li><a href="{{ route('home') }}#sport" class="transition hover:text-white">Sports programme</a></li>
-                        <li><a href="{{ route('home') }}#membership" class="transition hover:text-white">Membership</a></li>
-                        <li><a href="{{ route('home') }}#contact" class="transition hover:text-white">Contact</a></li>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-gold/70">Explore</p>
+                    <ul class="mt-5 space-y-2.5 text-sm text-white/60">
+                        <li><a href="{{ route('home') }}" class="transition hover:text-white">Home</a></li>
+                        @foreach ($primaryNav as $item)
+                            <li><a href="{{ $item['url'] }}" class="transition hover:text-white">{{ $item['label'] }}</a></li>
+                        @endforeach
                     </ul>
                 </div>
 
                 <div>
-                    <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">Contact</p>
-                    <ul class="mt-4 space-y-2.5 text-sm text-white/65">
+                    <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-gold/70">The association</p>
+                    <ul class="mt-5 space-y-2.5 text-sm text-white/60">
+                        @foreach ($associationNav as $item)
+                            <li><a href="{{ $item['url'] }}" class="transition hover:text-white">{{ $item['label'] }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <div>
+                    <p class="text-[10px] font-bold uppercase tracking-[0.22em] text-gold/70">Office</p>
+                    <ul class="mt-5 space-y-3 text-sm leading-relaxed text-white/60">
                         <li>{{ $association?->address ?: 'Address not configured' }}</li>
                         @if ($association?->phone)
                             <li><a href="tel:{{ $association->phone }}" class="transition hover:text-white">{{ $association->phone }}</a></li>
@@ -168,26 +211,22 @@
                             <li><a href="{{ $association->website }}" target="_blank" rel="noopener noreferrer" class="transition hover:text-white">{{ $association->website }}</a></li>
                         @endif
                     </ul>
-                </div>
-
-                <div>
-                    <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-white/35">Access</p>
-                    <ul class="mt-4 space-y-2.5 text-sm text-white/65">
-                        <li><a href="{{ route('login') }}" class="transition hover:text-white">Administrative login</a></li>
-                        <li><a href="{{ route('login') }}" class="transition hover:text-white">Member login</a></li>
-                    </ul>
-                    <p class="mt-5 text-xs leading-relaxed text-white/35">
-                        Access is limited to active accounts belonging to this association.
-                    </p>
+                    <a href="{{ route('contact') }}" class="mt-5 inline-flex items-center gap-1.5 text-xs font-semibold text-gold transition hover:text-gold-soft">Contact the association</a>
                 </div>
             </div>
 
-            <div class="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
+            <div class="mt-14 flex flex-col gap-4 border-t border-white/10 pt-6 text-xs text-white/35 sm:flex-row sm:items-center sm:justify-between">
                 <p>&copy; {{ now()->year }} {{ $associationName }}. All rights reserved.</p>
-                <p>Official association portal &middot; {{ $stateName }}</p>
+                <div class="flex flex-wrap items-center gap-x-5 gap-y-2">
+                    <a href="{{ route('privacy') }}" class="transition hover:text-white">Privacy</a>
+                    <a href="{{ route('terms') }}" class="transition hover:text-white">Terms</a>
+                    <span>Photography from the 2025 National Targetball Championship, Bhopal</span>
+                </div>
             </div>
         </div>
     </footer>
+
+    @stack('scripts')
 
     <script>
         (() => {

@@ -42,31 +42,34 @@ One application, distinct shells. Portals must not fork the design system; they 
 | `/admin/disciplines` | `admin.disciplines.index` | Admin | Association-scoped |
 | `/admin/categories` | `admin.categories.index` | Admin | Association-scoped |
 | `/admin/membership-categories` | `admin.membership-categories.index` | Admin | Association-scoped |
+| `/about` | `about` | Public | Association profile and milestones |
+| `/governance` | `governance` | Public | Structure, publication status, process |
+| `/districts` | `districts.index` | Public | State-scoped district directory + search |
+| `/districts/{district}` | `districts.show` | Public | Scoped district page, 404 outside the state |
+| `/sports` | `sports.index` | Public | Enabled sports, facts and categories |
+| `/sports/{sport}` | `sports.show` | Public | Enabled sport only, scoped 404 |
+| `/membership` | `membership` | Public | Categories, fees, approval rules |
+| `/contact` | `contact` | Public | Office details and pre-addressed email topics |
+| `/events` | `events.index` | Public | Championship programme and milestones |
+| `/results` | `results.index` | Public | Publication status and categories (no invented results) |
+| `/news` | `news.index` | Public | Verified championship update and notice board |
+| `/gallery` | `gallery.index` | Public | 10-frame championship gallery with lightbox |
+| `/downloads` | `downloads.index` | Public | Document library marked “on request” |
+| `/register` | `register` | Public | Four-step registration pathway |
+| `/privacy` | `privacy` | Public | Portal privacy policy |
+| `/terms` | `terms` | Public | Portal terms of use |
 
-### Designed next (public)
+### Planned expansions (public)
 
 | Route | Page | Depends on |
 | --- | --- | --- |
-| `/about` | About the association | M1 content confirmation |
-| `/governance` | Office bearers and committees | M1 |
-| `/districts` | District directory | M2 profiles |
-| `/districts/{district}` | District detail | M2 |
 | `/organizations` | Affiliated organization directory | M4 |
 | `/organizations/{slug}` | Organization detail (public fields only) | M4 |
-| `/sports` | Sports programme | M3 |
-| `/sports/targetball` | Targetball sport page | M3 + approved sport content |
-| `/events` | Event calendar | M7 |
 | `/events/{slug}` | Event detail and entry status | M7 |
-| `/results` | Public results | M9 |
-| `/news` | News and notices | M11 |
 | `/notices/{slug}` | Notice detail | M11 |
-| `/gallery` | Gallery | M11 |
-| `/downloads` | Public documents | M11 |
-| `/register` | Registration entry point | M5/M6 policy |
-| `/contact` | Contact form | M11 + spam protection |
-| `/privacy`, `/terms` | Policy pages | Association legal content |
+| `/downloads/{document}` | Authorized public file delivery | M11 |
 
-Public navigation must only link to routes that exist. Until pages ship, the header uses section anchors on the homepage; never create dead links.
+Public navigation only links to routes that exist. The header, footer and mobile menu share one navigation map; new pages must be added to that map and covered by a route test before release.
 
 ### Designed next (authenticated)
 

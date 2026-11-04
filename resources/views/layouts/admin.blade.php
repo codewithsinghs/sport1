@@ -15,6 +15,13 @@
             ],
         ],
         [
+            'label' => 'Programme',
+            'items' => [
+                ['label' => 'District associations', 'route' => route('admin.district-bodies.index'), 'match' => 'admin.district-bodies.*', 'icon' => 'M4 20h16M6 20V9l6-4 6 4v11M10 20v-5h4v5'],
+                ['label' => 'Events & championships', 'route' => route('admin.events.index'), 'match' => 'admin.events.*', 'icon' => 'M7 3v3M17 3v3M4 9h16M5 6h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z'],
+            ],
+        ],
+        [
             'label' => 'Master data',
             'items' => [
                 ['label' => 'Districts', 'route' => route('admin.districts.index'), 'match' => 'admin.districts.*', 'icon' => 'M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11zM12 12a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z'],
@@ -33,8 +40,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#050b14">
     <title>{{ $association?->short_name ?? $association?->name ?? config('app.name') }} — Administration</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js', 'resources/js/admin.js'])
     @livewireStyles
+    @stack('styles')
     <style>
         :root {
             --brand: {{ $association?->primaryColor() ?? '#0f766e' }};
@@ -143,11 +151,24 @@
                     </div>
                 @endif
 
+                @if (session('error'))
+                    <div x-data="{ show: true }" x-show="show" class="mb-6 flex items-start justify-between gap-4 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3.5 text-sm font-medium text-amber-900 shadow-soft">
+                        <span class="flex items-start gap-2.5">
+                            <svg class="mt-0.5 h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v4m0 3h.01M10.3 4.3 2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z" />
+                            </svg>
+                            {{ session('error') }}
+                        </span>
+                        <button type="button" @click="show = false" class="text-amber-700 hover:text-amber-900" aria-label="Dismiss">&times;</button>
+                    </div>
+                @endif
+
                 {{ $slot }}
             </main>
         </div>
     </div>
 
     @livewireScripts
+    @stack('scripts')
 </body>
 </html>

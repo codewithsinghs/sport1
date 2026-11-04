@@ -147,16 +147,37 @@
                     <p class="muted mt-1">The public website resolves the association from these trusted domains.</p>
                 </div>
                 <div class="card-body">
-                    @if ($domains->isEmpty())
-                        <p class="text-sm text-slate-500">No public domains are registered. The configured default association will be used when enabled.</p>
-                    @else
-                        <div class="flex flex-wrap gap-2">
-                            @foreach ($domains as $domain)
-                                <span class="badge badge-slate">{{ $domain }}</span>
-                            @endforeach
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div>
+                            <label for="profile-instagram" class="label">Instagram</label>
+                            <input id="profile-instagram" type="url" class="input" wire:model="instagramUrl" placeholder="https://www.instagram.com/" @disabled(! $canEdit)>
+                            @error('instagramUrl')
+                                <p class="error">{{ $message }}</p>
+                            @enderror
                         </div>
-                    @endif
-                    <p class="mt-3 text-xs text-slate-500">
+                        <div>
+                            <label for="profile-national-body" class="label">National body website</label>
+                            <input id="profile-national-body" type="url" class="input" wire:model="nationalBodyUrl" placeholder="https://" @disabled(! $canEdit)>
+                            @error('nationalBodyUrl')
+                                <p class="error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+
+                    <div class="mt-6 border-t border-slate-100 pt-5">
+                        <p class="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">Registered domains</p>
+                        @if ($domains->isEmpty())
+                            <p class="mt-2 text-sm text-slate-500">No public domains are registered. The configured default association will be used when enabled.</p>
+                        @else
+                            <div class="mt-2 flex flex-wrap gap-2">
+                                @foreach ($domains as $domain)
+                                    <span class="badge badge-slate">{{ $domain }}</span>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+
+                    <p class="mt-4 text-xs text-slate-500">
                         Domain mappings are server-managed to prevent users from selecting another association through request input.
                     </p>
                 </div>

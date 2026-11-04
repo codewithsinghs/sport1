@@ -45,10 +45,12 @@ class AssociationSeeder extends Seeder
         }
 
         app(AssociationSettings::class)->setMany($association, [
-            AssociationSettings::ABOUT => 'Official association for the promotion, development and administration of Targetball across all districts of Madhya Pradesh.',
+            AssociationSettings::ABOUT => 'Official state association for the promotion, development and administration of Targetball across all districts of Madhya Pradesh.',
             AssociationSettings::PRIMARY_COLOR => '#0f766e',
             AssociationSettings::SECONDARY_COLOR => '#f59e0b',
             AssociationSettings::LOGO_PATH => null,
+            AssociationSettings::INSTAGRAM_URL => 'https://www.instagram.com/madhyapradeshtargetball/',
+            AssociationSettings::NATIONAL_BODY_URL => 'https://www.targetballindia.com',
         ]);
     }
 }

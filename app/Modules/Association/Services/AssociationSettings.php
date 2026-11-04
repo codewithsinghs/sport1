@@ -17,6 +17,10 @@ class AssociationSettings
 
     public const LOGO_PATH = 'logo_path';
 
+    public const INSTAGRAM_URL = 'instagram_url';
+
+    public const NATIONAL_BODY_URL = 'national_body_url';
+
     public function all(Association $association): array
     {
         $associationId = $association->getKey();
@@ -70,6 +74,8 @@ class AssociationSettings
             self::PRIMARY_COLOR => '#0f766e',
             self::SECONDARY_COLOR => '#f59e0b',
             self::LOGO_PATH => null,
+            self::INSTAGRAM_URL => null,
+            self::NATIONAL_BODY_URL => null,
         ];
     }
 

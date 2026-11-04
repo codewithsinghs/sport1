@@ -4,9 +4,17 @@ namespace App\Modules\Association\Models;
 
 use App\Models\User;
 use App\Modules\Association\Services\AssociationSettings;
+use App\Modules\Content\Models\ContentBlock;
+use App\Modules\Engagement\Models\ContactLead;
 use App\Modules\Geography\Models\District;
 use App\Modules\Geography\Models\State;
 use App\Modules\Membership\Models\MembershipCategory;
+use App\Modules\Programme\Models\DistrictAssociation;
+use App\Modules\Programme\Models\Event;
+use App\Modules\Programme\Models\EventEntry;
+use App\Modules\Roster\Models\DistrictTeamMember;
+use App\Modules\Roster\Models\Player;
+use App\Modules\Roster\Models\StateTeamMember;
 use App\Modules\Sport\Models\Category;
 use App\Modules\Sport\Models\Discipline;
 use App\Modules\Sport\Models\Sport;
@@ -82,6 +90,48 @@ class Association extends Model
     public function users(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function districtAssociations(): HasMany
+    {
+        return $this->hasMany(DistrictAssociation::class);
+    }
+
+    public function events(): HasMany
+    {
+        return $this->hasMany(Event::class);
+    }
+
+    public function eventEntries(): HasMany
+    {
+        return $this->hasMany(EventEntry::class);
+    }
+
+    public function contentBlocks(): HasMany
+    {
+        return $this->hasMany(ContentBlock::class);
+    }
+
+    public function contactLeads(): HasMany
+    {
+        return $this->hasMany(ContactLead::class);
+    }
+
+    public function players(): BelongsToMany
+    {
+        return $this->belongsToMany(Player::class, 'player_associations')
+            ->withPivot(['source', 'is_active', 'created_by'])
+            ->withTimestamps();
+    }
+
+    public function districtTeamMembers(): HasMany
+    {
+        return $this->hasMany(DistrictTeamMember::class);
+    }
+
+    public function stateTeamMembers(): HasMany
+    {
+        return $this->hasMany(StateTeamMember::class);
     }
 
     public function districts(): HasMany

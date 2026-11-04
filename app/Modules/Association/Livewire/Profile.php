@@ -25,6 +25,10 @@ class Profile extends Component
 
     public string $website = '';
 
+    public string $instagramUrl = '';
+
+    public string $nationalBodyUrl = '';
+
     public string $address = '';
 
     public string $about = '';
@@ -49,6 +53,8 @@ class Profile extends Component
         $this->email = $association->email ?? '';
         $this->phone = $association->phone ?? '';
         $this->website = $association->website ?? '';
+        $this->instagramUrl = (string) $association->setting(AssociationSettings::INSTAGRAM_URL, '');
+        $this->nationalBodyUrl = (string) $association->setting(AssociationSettings::NATIONAL_BODY_URL, '');
         $this->address = $association->address ?? '';
         $this->about = (string) $association->setting(AssociationSettings::ABOUT, '');
         $this->primaryColor = $association->primaryColor();
@@ -74,6 +80,8 @@ class Profile extends Component
             'email' => ['nullable', 'email', 'max:150'],
             'phone' => ['nullable', 'string', 'max:30'],
             'website' => ['nullable', 'url', 'max:200'],
+            'instagramUrl' => ['nullable', 'url', 'max:200'],
+            'nationalBodyUrl' => ['nullable', 'url', 'max:200'],
             'address' => ['nullable', 'string', 'max:500'],
             'about' => ['nullable', 'string', 'max:2000'],
             'primaryColor' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
@@ -95,6 +103,8 @@ class Profile extends Component
             AssociationSettings::ABOUT => $validated['about'] ?: null,
             AssociationSettings::PRIMARY_COLOR => strtolower($this->primaryColor),
             AssociationSettings::SECONDARY_COLOR => strtolower($this->secondaryColor),
+            AssociationSettings::INSTAGRAM_URL => $validated['instagramUrl'] ?: null,
+            AssociationSettings::NATIONAL_BODY_URL => $validated['nationalBodyUrl'] ?: null,
         ];
 
         $currentLogo = $association->setting(AssociationSettings::LOGO_PATH);

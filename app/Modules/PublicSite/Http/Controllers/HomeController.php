@@ -5,6 +5,7 @@ namespace App\Modules\PublicSite\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Core\Association\AssociationContext;
 use App\Modules\Geography\Models\District;
+use App\Modules\PublicSite\Support\PublicContent;
 use App\Modules\Sport\Models\Category;
 use App\Modules\Sport\Models\Discipline;
 
@@ -27,8 +28,18 @@ class HomeController extends Controller
                 ->where('is_active', true)
                 ->orderBy('name')
                 ->get(),
-            'disciplineCount' => Discipline::query()->count(),
-            'categoryCount' => Category::query()->count(),
+            'disciplineCount' => Discipline::query()->where('is_active', true)->count(),
+            'categoryCount' => Category::query()->where('is_active', true)->count(),
+            'championship' => PublicContent::championship(),
+            'gameFacts' => PublicContent::gameFacts(),
+            'milestones' => PublicContent::milestones(),
+            'gallery' => PublicContent::gallery(),
+            'story' => PublicContent::championshipStory(),
+            'featuredDistricts' => $association->districts()
+                ->where('is_active', true)
+                ->orderBy('name')
+                ->limit(12)
+                ->get(),
         ]);
     }
 }

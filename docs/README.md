@@ -17,7 +17,7 @@ The source of truth for product scope is the PRD (`MP_Targetball_Association_Com
 
 ## Current delivery focus
 
-**Frontend foundation for MPTA / Targetball.** The backend foundation (association context, auth, roles, masters) is already working; this design pass establishes the public site, admin shell and reusable component language that later modules will plug into.
+**Public site v0.2 and frontend foundation.** The backend foundation (association context, auth, roles, masters) is working. The public site now runs on the editorial “luxe sport” layer with real 2025 championship photography, ten homepage sections and the full page set (events, results, news, gallery, downloads, register, policies). Later modules plug into the same tokens and components.
 
 ## Documentation rules
 

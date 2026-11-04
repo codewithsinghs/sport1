@@ -1,5 +1,40 @@
 # 07 — Changelog
 
+## 2026-11-04 — v0.2 real photography, editorial luxe theme and expanded public site
+
+### Identity and imagery
+- Replaced generated mock imagery with real 2025 National Targetball Championship photography sourced from `targetballindia.com` and the MPTA Instagram profile.
+- Added responsive WebP sets (1600/1400/1200 px + `-sm` variants) for the stadium, contingents, ceremony, officials, international teams and a 12-frame gallery.
+- Confirmed sport facts used across the site: six players a side, 30 × 20 m court, four diamond zones, founded 25 May 2012 in Mathura, first national event October 2013, 2025 nationals at Tatya Tope Stadium, Bhopal.
+- Footer credit: “Photography from the 2025 National Targetball Championship, Bhopal”.
+
+### Design system
+- Introduced an editorial “luxe sport” layer on top of Target Court: ink-green `#06110e`, warm paper `#f5f2ea`, cream `#ece4d3` and brass gold `#c1a26a`.
+- Added self-hosted Bodoni Moda variable serif for display headings, paired with Space Grotesk and Plus Jakarta Sans.
+- Added `display-serif*`, `eyebrow-luxe`, `rule-gold`, `btn-gold`, `btn-outline-light`, `luxe-card`, `luxe-panel`, `photo-veil`, `photo-grain`, `gallery-tile`, `kicker-number` and `nav-panel` styles.
+- Rebuilt `page-hero`, `section-heading` and `cta-band` around full-bleed photography, serif headlines, gold hairlines and dark editorial panels.
+- Preserved existing admin classes and behaviour; the luxe layer is additive and public-facing.
+
+### Public site
+- Rebuilt the public layout with a dark two-tier header, primary navigation, an “Association” dropdown, gold membership action, full mobile menu and a four-column dark footer with privacy/terms and photo credit.
+- Rebuilt the homepage with ten sections: photographic hero and event card, facts ticker, the game, championship spotlight, pathway, district network, membership, gallery mosaic, news feature with official channels, and a closing CTA.
+- Added live pages: `/events`, `/results`, `/news`, `/gallery`, `/downloads`, `/register`, `/privacy`, `/terms`.
+- Refreshed existing pages (`about`, `governance`, `membership`, `contact`, district index and detail, sports index and detail) onto the new system with authentic photography.
+- Added a native `<dialog>` gallery lightbox with captions and Escape/backdrop close.
+- Results and downloads are deliberately honest: no invented winners, documents or policies; unverified items are marked “pending” or “on request”.
+
+### Association settings
+- Added editable `instagram_url` and `national_body_url` settings, seeded for MPTA and surfaced in the public header, footer, contact page and homepage channels panel.
+- `PublicContent` now centralises championship facts, milestone dates, gallery captions and the championship story so official copy has one edit point.
+
+### Verification
+- `php artisan view:cache` — pass; all Blade templates compile.
+- `npm run build` — pass; CSS 122.82 kB (21.72 kB gzip), JS 59.10 kB (22.24 kB gzip).
+- `php artisan test` — pass; 30 tests, 102 assertions, including five new `PublicPagesTest` cases for page rendering, gallery content, district scoping, sport enablement and missing association context.
+- HTTP smoke — all public routes (`/`, about, governance, districts, district detail, sports, sport detail, membership, contact, events, results, news, gallery, downloads, register, privacy, terms, login) return 200.
+- Browser structural check — mobile menu toggles with correct `aria-expanded`, gallery dialog opens with the correct image/caption, no console errors, no horizontal overflow, and lazy images load below the fold.
+- Screenshot capture remains unavailable in the in-app browser (`NATIVE_BROWSER_VIEWPORT_UNAVAILABLE`); verification used accessibility-tree snapshots, DOM checks and HTTP responses.
+
 ## 2026-11-04 — v0.1 documentation + Target Court frontend
 
 ### Documentation
